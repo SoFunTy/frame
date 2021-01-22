@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
+    <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] %clr([%level]) [%thread] [%clr([%logger]:%L){cyan}] >>> %msg %n" />
+
+    <property resource="application.yml"/>
+    <springProperty scope="context" name="LOGGING_LEVEL_ROOT" source="logging.level.root" defaultValue="INFO"/>
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="App"/>
+    <springProperty scope="context" name="LOGGING_HOME" source="logging.home" defaultValue="logs"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ALL_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_HOME}/${APP_NAME}-%d{yyyy-MM-dd}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_HOME}/${APP_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="INFO_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_HOM}/info-${APP_NAME}-%d{yyyy-MM-dd}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>info</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_HOME}/info-${APP_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_HOME}/error-${APP_NAME}-%d{yyyy-MM-dd}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>error</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_HOME}/error-${APP_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="DEBUG_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_HOME}/debug-${APP_NAME}-%d{yyyy-MM-dd}.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>debug</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGGING_HOME}/debug-${APP_NAME}.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder charset="UTF-8" class="com.yomahub.tlog.core.enhance.logback.AspectLogbackEncoder">
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--    <appender name="devLogStash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">-->
+    <!--        <destination>0.0.0.0:5044</destination>-->
+    <!--        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder">-->
+    <!--            <customFields>{"appname":"sale-api","type":"dev"}</customFields>-->
+    <!--            <providers>-->
+    <!--                <timestamp>-->
+    <!--                    <timeZone>UTC</timeZone>-->
+    <!--                </timestamp>-->
+    <!--                <pattern>-->
+    <!--                    <pattern>${LOG_PATTERN}</pattern>-->
+    <!--                </pattern>-->
+    <!--            </providers>-->
+    <!--        </encoder>-->
+    <!--    </appender>-->
+
+    <root>
+        <level value="${LOGGING_LEVEL_ROOT}"/>
+        <!--        <appender-ref ref="devLogStash"/>-->
+<!--                <appender-ref ref="STDOUT"/>-->
+        <!--        <appender-ref ref="ALL_APPENDER"/>-->
+        <!--        <appender-ref ref="INFO_APPENDER"/>-->
+        <!--        <appender-ref ref="ERROR_APPENDER"/>-->
+        <!--        <appender-ref ref="DEBUG_APPENDER"/>-->
+    </root>
+
+</configuration>
